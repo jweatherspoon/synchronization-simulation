@@ -1,0 +1,3 @@
+module.exports = {
+    APPLICATION_STATE_UPDATED: "APPLICATION_STATE_UPDATED",
+}

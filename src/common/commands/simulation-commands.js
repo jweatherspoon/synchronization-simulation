@@ -1,0 +1,3 @@
+module.exports = {
+    UPDATE_OSCILLATORS: "UPDATE_OSCILLATORS",
+};
