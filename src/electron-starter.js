@@ -60,5 +60,5 @@ app.on('activate', function () {
 const configureConfigurationService = require("./business/services/configuration-service");
 configureConfigurationService();
 
-const configureOscillationService = require("./business/services/oscillation-service");
-configureOscillationService();
+const simulationService = require("./business/services/simulation-service");
+simulationService.configureService();
