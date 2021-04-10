@@ -13,7 +13,6 @@ const setCouplingFactor = (K) => new Promise((res, rej) => {
 });
 
 const setOscillators = (numOscillators) => new Promise((res, rej) => {
-    console.log(numOscillators);
     if (numOscillators <= 0) {
         rej("Number of oscillators must be at least 1!");
     }

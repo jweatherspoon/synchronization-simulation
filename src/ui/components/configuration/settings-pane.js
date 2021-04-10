@@ -4,10 +4,10 @@ const SettingsPane = (props) => {
     const {
         settings: {
             couplingFactor,
-            numOscillators
+            numOscillators,
+            tickRate
         },
         onChangeSetting,
-        onTick
     } = props;
 
     return (
@@ -16,7 +16,8 @@ const SettingsPane = (props) => {
             <input type="number" name="couplingFactor" value={couplingFactor} onChange={(e) => onChangeSetting("couplingFactor", e.target.value)} />
             <label htmlFor="numOscillators">Number of Oscillators</label>
             <input type="number" name="numOscillators" value={numOscillators} onChange={(e) => onChangeSetting("numOscillators", e.target.value)} />
-            <button onClick={onTick}>Update One Tick</button>
+            <label htmlFor="tickRate">Tick Rate (ms)</label>
+            <input type="number" name="tickRate" value={tickRate} onChange={(e) => onChangeSetting("tickRate", e.target.value)} />
         </div>
     );
 }

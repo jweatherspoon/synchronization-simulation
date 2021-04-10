@@ -24,10 +24,7 @@ class App extends Component {
     componentDidMount() {
         this.updateSetting("numOscillators", this._defaultOscillatorCount);
         this.updateSetting("couplingFactor", this._defaultCouplingFactor);
-        this._interval = setInterval(async () => {
-            await this.onTick();
-            // console.log(this.state.oscillators);
-        }, this._tickRate);
+        this.updateSetting("tickRate", this._tickRate);
     }
 
     /**
@@ -47,6 +44,7 @@ class App extends Component {
                 <SettingsPane settings={{
                     couplingFactor: this.state?.couplingFactor || 1,
                     numOscillators: this.state?.numOscillators || 1,
+                    tickRate: this._tickRate,
                 }} onChangeSetting={this.updateSetting} onTick={this.onTick} />
             </header>
         )
@@ -78,6 +76,14 @@ class App extends Component {
                 couplingFactor
             });
         }
+        else if (settingName === "tickRate") {
+            if (!value || value <= 0) {
+                value = 10; // 10ms by default 
+            }
+
+            this._tickRate = value;
+            this.restartSimulation();
+        }
     }
 
     onTick = async () => {
@@ -86,6 +92,17 @@ class App extends Component {
             oscillators,
             numOscillators: oscillators.length,
         })
+    }
+
+    restartSimulation = () => {
+        if (this._interval) {
+            clearInterval(this._interval);
+            this._interval = null;
+        }
+
+        this._interval = setInterval(async () => {
+            await this.onTick();
+        }, this._tickRate);
     }
 }
 
