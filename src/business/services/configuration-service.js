@@ -1,39 +1,42 @@
-// what should this do?
-// we have settings we need also an equation 
-// equation: d{theta_i}/dt = omega_i + (K/N)\sum_{j=1}^N{sin(theta_j - theta_i)} (all oscillators coupled to each other by some coupling factor K)
-
 // allows us to manage the configuration-properties on the application state 
-const ApplicationState = require("../application-state");
-const { ipcMain } = require("electron");
-const createOscillator = require("../oscillators/oscillator-factory");
+const ElectronService = require("./electron-service");
+const ApplicationState = require("../state/application-state");
+const ConfigurationConstants = require('../../common/commands/configuration-commands');
 
-const setCouplingFactor = (K) => new Promise((res, rej) => {
-    ApplicationState.couplingFactor = K;
-    res(ApplicationState.couplingFactor);
-});
-
-const setOscillators = (numOscillators) => new Promise((res, rej) => {
-    if (numOscillators <= 0) {
-        rej("Number of oscillators must be at least 1!");
+/**
+ * The configuration service
+ */
+class ConfigurationService extends ElectronService {
+    /**
+     * Create a configuration service
+     */
+    constructor() {
+        super();
+        this.registerEventHandler(ConfigurationConstants.SET_NUM_OSCILLATORS, this.setOscillators);
+        this.registerEventHandler(ConfigurationConstants.SET_COUPLING_FACTOR, this.setCouplingFactor);
     }
 
-    const oscillators = [];
-    for (let i = 0; i < numOscillators; i++) {
-        oscillators.push(createOscillator());
-    }
+    /**
+     * Set the coupling factor on the application state
+     * @param {event} e - The event
+     * @param {number} couplingFactor - The coupling factor to set
+     * @returns The set coupling factor
+     */
+    setCouplingFactor = async (e, couplingFactor) => new Promise((res, rej) => {
+        ApplicationState.CouplingFactor = couplingFactor;
+        res(ApplicationState.CouplingFactor);
+    });
 
-    ApplicationState.oscillators = oscillators;
-    res(oscillators);
-});
-
-module.exports = () => {
-    // service configuration 
-    const {
-        SET_COUPLING_FACTOR,
-        SET_NUM_OSCILLATORS
-    } = require("../../common/commands/configuration-commands");
-
-    ipcMain.handle(SET_COUPLING_FACTOR, async (e, couplingFactor) => await setCouplingFactor(couplingFactor));
-
-    ipcMain.handle(SET_NUM_OSCILLATORS, async (e, numOscillators) => await setOscillators(numOscillators));
+    /**
+     * Create and set the oscillators used in the application
+     * @param {event} e - The event
+     * @param {number} numOscillators - The number of oscillators to create
+     * @returns The created oscillators
+     */
+    setOscillators = (e, numOscillators) => new Promise((res, rej) => {
+        ApplicationState.OscillationState.resetOscillators(numOscillators);
+        res(ApplicationState.OscillationState.Oscillators);
+    });
 }
+
+module.exports = new ConfigurationService();

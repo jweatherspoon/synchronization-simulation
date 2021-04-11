@@ -1,9 +1,11 @@
-const { ipcMain } = require("electron");
-const { APPLICATION_STATE_UPDATED } = require("../common/events/application-state-events");
+const OscillationState = require("./oscillation-state");
 
+/**
+ * Holds the state of the application
+ */
 class ApplicationState {
     _couplingFactor = 1;
-    _oscillators = [];
+    _oscillationState = new OscillationState();
     _tickRate = 1000;
 
     /**
@@ -27,6 +29,27 @@ class ApplicationState {
      */
     get UpdateFrequency() {
         return 1000 / this.TickRate;
+    }
+
+    /**
+     * Get the coupling factor used in Kuramoto's model
+     */
+    get CouplingFactor() {
+        return this._couplingFactor;
+    }
+
+    /**
+     * Set the coupling factor used in Kuramoto's model
+     */
+    set CouplingFactor(value) {
+        this._couplingFactor = Math.max(0, value);
+    }
+
+    /**
+     * The oscillation-related state of the application
+     */
+    get OscillationState() {
+        return this._oscillationState;
     }
 }
 

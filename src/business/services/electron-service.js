@@ -1,5 +1,8 @@
 const { ipcMain } = require("electron");
 
+/**
+ * The base electron service type
+ */
 class ElectronService {
     /**
      * Map of event name => event handler

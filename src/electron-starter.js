@@ -55,10 +55,12 @@ app.on('activate', function () {
     }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-const configureConfigurationService = require("./business/services/configuration-service");
-configureConfigurationService();
+// configure electron services 
+const services = [
+    require("./business/services/simulation-service"),
+    require("./business/services/configuration-service"),
+];
 
-const simulationService = require("./business/services/simulation-service");
-simulationService.configureService();
+for (let service of services) {
+    service.configureService();
+}

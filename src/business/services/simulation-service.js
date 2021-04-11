@@ -1,4 +1,4 @@
-const ApplicationState = require('../application-state');
+const ApplicationState = require('../state/application-state');
 const ElectronService = require('./electron-service');
 const SimulationCommands = require("../../common/commands/simulation-commands");
 const { getSimulationStrategy } = require('../simulation/strategies/simulation-strategy-factory');
@@ -27,9 +27,14 @@ class SimulationService extends ElectronService {
      * @returns The updated oscillators
      */
     updateOscillators = async (e) => await new Promise((res, rej) => {
-        const newState = ApplicationState.oscillators.map(osc => this._simulationStrategy.updateOscillator(osc, ApplicationState.TickRate));
-        ApplicationState.oscillators = newState;
-        res(newState);
+        const newState = [];
+        for (let oscillator of ApplicationState.OscillationState.Oscillators) {
+            const updatedOscillator = this._simulationStrategy.updateOscillator(oscillator, ApplicationState.TickRate);
+            newState.push(updatedOscillator);
+        }
+        
+        ApplicationState.OscillationState.setOscillators(newState);
+        res(ApplicationState.OscillationState.Oscillators);
     });
 
     /**
