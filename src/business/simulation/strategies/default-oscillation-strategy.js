@@ -23,15 +23,13 @@ class DefaultOscillationStrategy extends OscillationStrategy {
         // determine how the angle should change based on all the oscillators using kuramoto
         let modifier = 0;
         for (let otherOsc of ApplicationState.OscillationState.Oscillators) {
-            modifier += Math.sin(otherOsc._theta - oscillator._theta);
+            modifier += Math.sin(otherOsc.Angle - oscillator.Angle);
         }
 
-        modifier *= ApplicationState.couplingFactor / ApplicationState.OscillationState.Oscillators.length;
+        modifier *= ApplicationState.CouplingFactor / ApplicationState.OscillationState.Oscillators.length;
 
-        const dtheta = (oscillator._naturalFrequency + modifier) / updateFrequency;
-        const newState = oscillator.clone();
-        newState._theta = (oscillator._theta + dtheta) % (Math.PI * 2);
-        return newState;
+        const dtheta = (oscillator.NaturalFrequency + modifier);// / updateFrequency;
+        return oscillator.clone(dtheta);
     }
 }
 

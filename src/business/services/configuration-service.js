@@ -12,6 +12,7 @@ class ConfigurationService extends ElectronService {
      */
     constructor() {
         super();
+        this.registerEventHandler(ConfigurationConstants.SET_TICK_RATE, this.setTickRate);
         this.registerEventHandler(ConfigurationConstants.SET_NUM_OSCILLATORS, this.setOscillators);
         this.registerEventHandler(ConfigurationConstants.SET_COUPLING_FACTOR, this.setCouplingFactor);
     }
@@ -36,6 +37,17 @@ class ConfigurationService extends ElectronService {
     setOscillators = (e, numOscillators) => new Promise((res, rej) => {
         ApplicationState.OscillationState.resetOscillators(numOscillators);
         res(ApplicationState.OscillationState.Oscillators);
+    });
+
+    /**
+     * Set the simulation tick rate
+     * @param {event} e - The event
+     * @param {number} tickRate - The new tick rate
+     * @returns The set tick rate
+     */
+    setTickRate = (e, tickRate) => new Promise((res, rej) => {
+        ApplicationState.TickRate = tickRate;
+        res(ApplicationState.TickRate);
     });
 }
 

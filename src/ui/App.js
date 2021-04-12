@@ -5,16 +5,19 @@ import SettingsPane from './components/configuration/settings-pane';
 import OscillatorCanvas from './components/canvas/oscillator-canvas';
 import { setCouplingFactor, setNumberOfOscillators } from './ui-services/configuration-ui-service';
 import { tick } from './ui-services/simulation-ui-service';
+import { setTickRate } from './ui-services/configuration-ui-service';
 
 class App extends Component {
+    _processingOnTick = false;
+    _defaultOscillatorCount = 2;
+    
     constructor(props) {
         super(props);
         this.state = {
-            oscillators: []
+            oscillators: [],
+            tickRate: 200,
         }
 
-        this._tickRate = 200;
-        this._defaultOscillatorCount = 2;
         this._defaultCouplingFactor = this._defaultOscillatorCount / 2;
     }
 
@@ -24,7 +27,7 @@ class App extends Component {
     componentDidMount() {
         this.updateSetting("numOscillators", this._defaultOscillatorCount);
         this.updateSetting("couplingFactor", this._defaultCouplingFactor);
-        this.updateSetting("tickRate", this._tickRate);
+        this.updateSetting("tickRate", this.state.tickRate);
     }
 
     /**
@@ -44,22 +47,10 @@ class App extends Component {
                 <SettingsPane settings={{
                     couplingFactor: this.state?.couplingFactor || 1,
                     numOscillators: this.state?.numOscillators || 1,
-                    tickRate: this._tickRate,
+                    tickRate: this.state.tickRate,
                 }} onChangeSetting={this.updateSetting} onTick={this.onTick} />
             </header>
         )
-    }
-
-    /**
-     * update the component state in response to an app state updated event 
-     * @param {*} event 
-     * @param {*} newState 
-     */
-    updateApplicationState = (event, newState) => {
-        this.setState({
-            ...this.state,
-            ...newState
-        });
     }
 
     updateSetting = async (settingName, value) => {
@@ -77,32 +68,33 @@ class App extends Component {
             });
         }
         else if (settingName === "tickRate") {
-            if (!value || value <= 0) {
-                value = 10; // 10ms by default 
-            }
-
-            this._tickRate = value;
+            const tickRate = await setTickRate(value);
             this.restartSimulation();
         }
     }
 
     onTick = async () => {
+        if (this._processingOnTick) {
+            return;
+        }
+
         const oscillators = await tick() || [];
         this.setState({
             oscillators,
             numOscillators: oscillators.length,
-        })
+        }, () => this._processingOnTick = false);
     }
 
-    restartSimulation = () => {
+    restartSimulation = (tickRate) => {
         if (this._interval) {
             clearInterval(this._interval);
             this._interval = null;
         }
 
-        this._interval = setInterval(async () => {
-            await this.onTick();
-        }, this._tickRate);
+        this.setState({ tickRate });
+
+        // fire and forget because we don't care when it gets rendered? I will also try a non-reentrant one 
+        this._interval = setInterval(this.onTick, tickRate);
     }
 }
 

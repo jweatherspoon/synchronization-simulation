@@ -10,7 +10,7 @@ class OscillationStrategy {
      */
     constructor(strategyName) {
         if (!strategyName) {
-            throw "Derived strategies must call the base constructor with a strategy name";
+            throw new Error("Derived strategies must call the base constructor with a strategy name");
         }
 
         this._strategyName = strategyName;
@@ -29,7 +29,7 @@ class OscillationStrategy {
      * @param {number} updateFrequency - The simulation update frequency in Hz
      */
     updateOscillator(oscillator, updateFrequency) {
-        throw "Derived strategies must implement this method";
+        throw new Error("Derived strategies must implement this method");
     }
 }
 
