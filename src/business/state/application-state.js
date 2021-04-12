@@ -19,7 +19,7 @@ class ApplicationState {
      * Set the tick rate of the simulation in ms (min 1ms)
      */
     set TickRate(value) {
-        if (value && typeof(value) === "number") {
+        if (value) {
             this._tickRate = Math.max(1, value);
         }
     }
