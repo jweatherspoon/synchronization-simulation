@@ -40,12 +40,17 @@ class Oscillator {
      * @param {number} dTheta - The change in the oscillator angle to apply to the clone
      * @returns A clone of the current oscillator - optionally with a modified angle 
      */
-    clone(dTheta) {
-        const newAnglePreMod = this.Angle + (dTheta || 0);
-        const newAngle = newAnglePreMod % (Math.Pi * 2);
-
+    clone(dTheta=0) {
+        const newAnglePreMod = this._theta + (dTheta || 0);
+        const newAngle = newAnglePreMod % (Math.PI * 2);
         return new Oscillator(this._id, this.NaturalFrequency, this._position, newAngle);
     }
+
+    toObject = () => ({
+        Angle: this.Angle,
+        NaturalFrequency: this.NaturalFrequency,
+        Position: this._position
+    })
 }
 
 module.exports = Oscillator;

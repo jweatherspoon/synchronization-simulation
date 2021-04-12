@@ -1,0 +1,10 @@
+.is-active {
+    background-color: #3a6;
+    color: #1f1f1f;
+}
+
+.oscillator-info {
+    border: 1px solid black;
+    padding: 1em;
+    max-width: 60rem;
+}

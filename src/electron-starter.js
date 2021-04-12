@@ -10,7 +10,7 @@ let mainWindow;
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 800, 
+        width: 1000, 
         height: 650,
         webPreferences: {
             nodeIntegration: true,
@@ -54,6 +54,12 @@ app.on('activate', function () {
         createWindow()
     }
 });
+
+// configure the default application state
+const appState = require("./business/state/application-state");
+appState.OscillationState.resetOscillators(2);
+appState.TickRate = 20;
+console.log(appState);
 
 // configure electron services 
 const services = [

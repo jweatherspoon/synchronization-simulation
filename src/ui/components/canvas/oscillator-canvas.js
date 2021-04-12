@@ -22,7 +22,7 @@ class OscillatorCanvas extends Component {
     }
 
     drawOscillator = (ctx, oscillator) => {
-        const fillColor = oscillator.isActive ? "yellow" : "gray";
+        const fillColor = oscillator.IsActive ? "yellow" : "gray";
 
         const oldFillColor = ctx.fillStyle;
         ctx.fillStyle = fillColor;

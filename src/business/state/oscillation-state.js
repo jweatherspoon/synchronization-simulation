@@ -41,7 +41,7 @@ class OscillationState {
      * @param {Oscillator} oscillator - The oscillator to add
      */
     addOscillator(oscillator) {
-        this._oscillators.push(oscillator);
+        this.Oscillators.push(oscillator);
     }
 
     /**

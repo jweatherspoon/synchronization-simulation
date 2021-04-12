@@ -20,16 +20,26 @@ class DefaultOscillationStrategy extends OscillationStrategy {
      * @param {number} updateFrequency - The simulation update frequency in Hz
      */
     updateOscillator(oscillator, updateFrequency) {
+        if (!oscillator) {
+            return; 
+        }
+
         // determine how the angle should change based on all the oscillators using kuramoto
         let modifier = 0;
         for (let otherOsc of ApplicationState.OscillationState.Oscillators) {
-            modifier += Math.sin(otherOsc.Angle - oscillator.Angle);
+            if (otherOsc) {
+                modifier += Math.sin(otherOsc.Angle - oscillator.Angle);
+            }
         }
 
-        modifier *= ApplicationState.CouplingFactor / ApplicationState.OscillationState.Oscillators.length;
+        if (ApplicationState.OscillationState.Oscillators.length > 0) {
+            modifier *= ApplicationState.CouplingFactor / ApplicationState.OscillationState.Oscillators.length;
+        }
 
         const dtheta = (oscillator.NaturalFrequency + modifier);// / updateFrequency;
-        return oscillator.clone(dtheta);
+        
+        const newOsc = oscillator.clone(dtheta);
+        return newOsc;
     }
 }
 

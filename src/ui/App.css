@@ -27,7 +27,6 @@ body,
   max-height: 100%;
   overflow: hidden;
   display: flex;
-  font-size: calc(10px + 2vmin);
   padding: 20px;
   color: white;
 }
@@ -46,5 +45,9 @@ body,
 }
 
 .split {
+    display: flex;
+}
+
+.container {
     display: flex;
 }

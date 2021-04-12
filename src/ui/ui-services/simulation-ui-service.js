@@ -4,5 +4,6 @@ import UiOscillator from "../ui-model/UiOscillator";
 
 export const tick = async () => {
     const oscillators = await tryInvokeEvent(SimulationCommands.UPDATE_OSCILLATORS);
-    return oscillators?.map(o => new UiOscillator(o, 500, 500)) || [];
+    const uiOscillators = oscillators?.map(o => new UiOscillator(o, 500, 500)) || [];
+    return uiOscillators;
 }

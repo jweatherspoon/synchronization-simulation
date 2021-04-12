@@ -6,6 +6,7 @@ import OscillatorCanvas from './components/canvas/oscillator-canvas';
 import { setCouplingFactor, setNumberOfOscillators } from './ui-services/configuration-ui-service';
 import { tick } from './ui-services/simulation-ui-service';
 import { setTickRate } from './ui-services/configuration-ui-service';
+import DebugView from './components/simulation/debug-view/debug-view';
 
 class App extends Component {
     _processingOnTick = false;
@@ -44,11 +45,14 @@ class App extends Component {
         return (
             <header className="split App-header">
                 <OscillatorCanvas oscillators={this.state?.oscillators || []} />
-                <SettingsPane settings={{
-                    couplingFactor: this.state?.couplingFactor || 1,
-                    numOscillators: this.state?.numOscillators || 1,
-                    tickRate: this.state.tickRate,
-                }} onChangeSetting={this.updateSetting} onTick={this.onTick} />
+                <div className="container">
+                    <SettingsPane settings={{
+                        couplingFactor: this.state?.couplingFactor || 1,
+                        numOscillators: this.state?.numOscillators || 1,
+                        tickRate: this.state.tickRate,
+                    }} onChangeSetting={this.updateSetting} onTick={this.onTick} />
+                    <DebugView oscillators={this.state?.oscillators || []} />
+                </div>
             </header>
         )
     }
@@ -69,7 +73,7 @@ class App extends Component {
         }
         else if (settingName === "tickRate") {
             const tickRate = await setTickRate(value);
-            this.restartSimulation();
+            this.restartSimulation(tickRate);
         }
     }
 

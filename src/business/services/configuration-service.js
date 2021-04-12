@@ -36,7 +36,7 @@ class ConfigurationService extends ElectronService {
      */
     setOscillators = (e, numOscillators) => new Promise((res, rej) => {
         ApplicationState.OscillationState.resetOscillators(numOscillators);
-        res(ApplicationState.OscillationState.Oscillators);
+        res(ApplicationState.OscillationState.Oscillators.map(osc => osc.toObject()));
     });
 
     /**

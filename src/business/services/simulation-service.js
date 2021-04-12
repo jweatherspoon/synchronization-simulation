@@ -29,12 +29,14 @@ class SimulationService extends ElectronService {
     updateOscillators = async (e) => await new Promise((res, rej) => {
         const newState = [];
         for (let oscillator of ApplicationState.OscillationState.Oscillators) {
-            const updatedOscillator = this._simulationStrategy.updateOscillator(oscillator, ApplicationState.TickRate);
-            newState.push(updatedOscillator);
+            if (oscillator) {
+                const updatedOscillator = this._simulationStrategy.updateOscillator(oscillator, ApplicationState.TickRate);
+                newState.push(updatedOscillator);
+            }
         }
         
         ApplicationState.OscillationState.setOscillators(newState);
-        res(ApplicationState.OscillationState.Oscillators);
+        res(ApplicationState.OscillationState.Oscillators.map(osc => osc.toObject()));
     });
 
     /**

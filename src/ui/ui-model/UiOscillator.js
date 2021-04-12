@@ -1,10 +1,10 @@
 class UiOscillator {
     x = 0;
     y = 0;
-    _isActive = false;
 
     _theta = 0;
     _naturalFrequency = 0;
+    _activationDistance = 0;
 
     /**
      * Create a renderable oscillator model 
@@ -14,16 +14,14 @@ class UiOscillator {
      * @param {number} activationDistance - The distance from 0-x radians where the oscillator is active
      */
     constructor(oscillator, canvasWidth, canvasHeight, activationDistance = (Math.PI / 180)) {
-        this.x = (oscillator._position?.x || 0) * canvasWidth;
-        this.y = (oscillator._position?.y || 0) * canvasHeight;
-
-        const negativeRange = (Math.PI * 2) - activationDistance;
-        this._isActive = oscillator.Angle > negativeRange || oscillator.Angle < activationDistance;
-
+        this.x = (oscillator.Position?.x || 0) * canvasWidth;
+        this.y = (oscillator.Position?.y || 0) * canvasHeight;
+        
         this._theta = oscillator.Angle;
+        this._activationDistance = activationDistance;
         this._naturalFrequency = oscillator.NaturalFrequency;
     }
-
+    
     /**
      * Get the oscillators current angle
      */
@@ -42,7 +40,8 @@ class UiOscillator {
      * Returns true if this oscillator is in its active state
      */
     get IsActive() {
-        return this._isActive;
+        const negativeRange = (Math.PI * 2) - this._activationDistance;
+        return this.Angle > negativeRange || this.Angle < this._activationDistance
     }
 }
 
