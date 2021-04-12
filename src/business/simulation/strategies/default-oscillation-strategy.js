@@ -36,7 +36,7 @@ class DefaultOscillationStrategy extends OscillationStrategy {
             modifier *= ApplicationState.CouplingFactor / ApplicationState.OscillationState.Oscillators.length;
         }
 
-        const dtheta = (oscillator.NaturalFrequency + modifier);// / updateFrequency;
+        const dtheta = (oscillator.NaturalFrequency + modifier) / updateFrequency;
         
         const newOsc = oscillator.clone(dtheta);
         return newOsc;

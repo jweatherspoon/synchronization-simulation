@@ -3,7 +3,7 @@ const Oscillator = require("./oscillator");
 
 const createOscillator = () => {
     // const naturalFrequency = Math.random() * Math.PI * 2;
-    const naturalFrequency = Math.PI / 180;
+    const naturalFrequency = Math.PI / 2;
     return new Oscillator(uuidv4(), naturalFrequency, {
         x: Math.random(),
         y: Math.random()
