@@ -14,10 +14,11 @@ class Oscillator {
      * @param {object} position - An object containing the oscillator's x y position info
      * @param {number} angle - The oscillator's position on the circle in radians (defaults to 0)
      */
-    constructor(id, naturalFrequency, position, theta) {
+    constructor(id, naturalFrequency, position, angle=0) {
         this._id = id;
         this._naturalFrequency = naturalFrequency;
         this._position = position || { x: 0, y: 0 };
+        this._theta = angle;
     }
 
     /**
