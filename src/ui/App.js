@@ -6,7 +6,9 @@ import OscillatorCanvas from './components/canvas/oscillator-canvas';
 import { setCouplingFactor, setNumberOfOscillators } from './ui-services/configuration-ui-service';
 import { tick } from './ui-services/simulation-ui-service';
 import { setTickRate } from './ui-services/configuration-ui-service';
-import DebugView from './components/simulation/debug-view/debug-view';
+import DebugView from './components/debug-view/debug-view';
+import SimulationCanvas from './components/canvas/simulation-canvas';
+import SIMULATION_VIEWS from "./components/canvas/simulation-views";
 
 class App extends Component {
     _processingOnTick = false;
@@ -17,6 +19,7 @@ class App extends Component {
         this.state = {
             oscillators: [],
             tickRate: 200,
+            simulationViewId: Object.keys(SIMULATION_VIEWS)[0]
         }
 
         this._defaultCouplingFactor = this._defaultOscillatorCount / 2;
@@ -44,14 +47,19 @@ class App extends Component {
     render() {
         return (
             <header className="split App-header">
-                <OscillatorCanvas oscillators={this.state?.oscillators || []} />
+                <SimulationCanvas oscillators={this.state?.oscillators || []} 
+                                  drawCanvas={SIMULATION_VIEWS[this.state.simulationViewId]} />
                 <div className="container">
                     <SettingsPane settings={{
                         couplingFactor: this.state?.couplingFactor || 1,
                         numOscillators: this.state?.numOscillators || 1,
                         tickRate: this.state.tickRate,
+                        simulationView: {
+                            selected: this.state.simulationViewId,
+                            options: Object.keys(SIMULATION_VIEWS)
+                        }
                     }} onChangeSetting={this.updateSetting} onTick={this.onTick} />
-                    <DebugView oscillators={this.state?.oscillators || []} />
+                    {/* <DebugView oscillators={this.state?.oscillators || []} /> */}
                 </div>
             </header>
         )
@@ -74,6 +82,11 @@ class App extends Component {
         else if (settingName === "tickRate") {
             const tickRate = await setTickRate(value);
             this.restartSimulation(tickRate);
+        }
+        else if (settingName === "simulation-view") {
+            this.setState({
+                simulationViewId: value
+            });
         }
     }
 
